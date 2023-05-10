@@ -1,9 +1,11 @@
 #setwd("C:/Users/Matheus/OneDrive/Área de Trabalho/FATEC - BD Negócios/Projetos/R/Cancer")
 
-install.packages("partykit")
-install.packages("party")
+#install.packages("partykit")
+#install.packages("party")
+#install.packages('caret')
 library(partykit)
 library(dplyr)
+library(caret)
 library(party)
 
 cancer <- read.csv("Cancer_Data.csv", header = TRUE, sep=",")
@@ -28,6 +30,10 @@ ind <- sample(2, nrow(cancer), replace=TRUE, prob=c(0.7,0.3))
 train.data <- cancer[ind==1,]
 test.data <- cancer[ind==2,]
 
+str(train.data)
+str(test.data)
+
+
 dim(cancer)
 dim(train.data) # [1] 400  31
 dim(test.data) # [1] 169  31
@@ -36,7 +42,8 @@ dim(test.data) # [1] 169  31
 myFormula <- diagnosis ~ .
 #myFormula
 
-cancer_ctree <- ctree(myFormula, data=train.data)
+cancer_ctree <- ctree(myFormula, scores = c("B", "M"), data=train.data)
+print(cancer_ctree)
 table(predict(cancer_ctree),train.data$diagnosis)
 
 #    B   M
@@ -45,4 +52,10 @@ table(predict(cancer_ctree),train.data$diagnosis)
 
 plot(cancer_ctree)
 
+# PREVISÕES
+pred = predict(cancer_ctree, train.data[,-232])
+pred
+str(pred)
 
+cm = confusionMatrix(data = test.data, reference =  pred)
+print(cm)

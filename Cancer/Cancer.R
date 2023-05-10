@@ -24,7 +24,7 @@ diagnosis
 #M = Maligno
 
 set.seed(1234)
-ind <- sample(2, nrow(cancer), replace=TRUE, prob=c(0.7,0.3))
+ind <- sample(2, nrow(cancer), replace=TRUE, prob=c(0.8,0.2))
 
 # TRAIN AND TEST DATA
 train.data <- cancer[ind==1,]
@@ -58,6 +58,6 @@ str(pred)
 
 # ACCURACY
 
-accuracy = (248 + 127) /(248+6+127+11)
+accuracy = (285 + 152) /(285 + 152 + 7 + 12)
 accuracy
-# [1] 0.9566327
+# [1] 0.9583333

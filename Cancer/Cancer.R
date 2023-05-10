@@ -1,9 +1,48 @@
 #setwd("C:/Users/Matheus/OneDrive/Área de Trabalho/FATEC - BD Negócios/Projetos/R/Cancer")
 
+install.packages("partykit")
+install.packages("party")
+library(partykit)
+library(dplyr)
+library(party)
+
 cancer <- read.csv("Cancer_Data.csv", header = TRUE, sep=",")
 View(cancer)
-
 attach(cancer)
 
-plot(symmetry_se, area_se)
-     
+#Retirando a coluna id e X 
+cancer <- cancer[ c(2:32) ]
+# Convertendo diagnosis para numérico
+cancer$diagnosis <- as.factor(cancer$diagnosis)
+View(cancer)
+str(cancer)
+
+diagnosis
+#B = Benigno
+#M = Maligno
+
+set.seed(1234)
+ind <- sample(2, nrow(cancer), replace=TRUE, prob=c(0.7,0.3))
+
+# TRAIN AND TEST DATA
+train.data <- cancer[ind==1,]
+test.data <- cancer[ind==2,]
+
+dim(cancer)
+dim(train.data) # [1] 400  31
+dim(test.data) # [1] 169  31
+
+
+myFormula <- diagnosis ~ .
+#myFormula
+
+cancer_ctree <- ctree(myFormula, data=train.data)
+table(predict(cancer_ctree),train.data$diagnosis)
+
+#    B   M
+#B 248  11
+#M   6 127
+
+plot(cancer_ctree)
+
+

@@ -38,7 +38,6 @@ dim(cancer)
 dim(train.data) # [1] 400  31
 dim(test.data) # [1] 169  31
 
-
 myFormula <- diagnosis ~ .
 #myFormula
 
@@ -53,9 +52,12 @@ table(predict(cancer_ctree),train.data$diagnosis)
 plot(cancer_ctree)
 
 # PREVISÕES
-pred = predict(cancer_ctree, train.data[,-232])
+pred = predict(cancer_ctree, test.data)
 pred
 str(pred)
 
-cm = confusionMatrix(data = test.data, reference =  pred)
-print(cm)
+# ACCURACY
+
+accuracy = (248 + 127) /(248+6+127+11)
+accuracy
+# [1] 0.9566327
